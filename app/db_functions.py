@@ -321,7 +321,7 @@ def get_advanced_product_insights(cursor, product_id):
         return None
 
     name          = meta["product_name"]
-    current_stock = meta["stock_quantity"]
+    current_stock = float(meta["stock_quantity"])   # cast — DB may return string
     price         = float(meta["price"])
 
     if not sales_data:
