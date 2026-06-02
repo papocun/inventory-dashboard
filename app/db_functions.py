@@ -13,6 +13,8 @@ def connect_to_db():
         port=int(os.getenv("DB_PORT", 3306))
     )
 
+# CRITICAL FIX: Ensure you create cursors in your main app using:
+# cursor = db.cursor(dictionary=True)
 
 def get_basic_info(cursor):
     queries = {
@@ -47,11 +49,12 @@ def get_basic_info(cursor):
     for label, query in queries.items():
         cursor.execute(query)
         row = cursor.fetchone()
-        result[label] = list(row.values())[0]
+        # Safe fallback: extract values cleanly from the dictionary cursor row
+        result[label] = list(row.values())[0] if row else 0
     return result
 
 
-def get_additonal_tables(cursor):
+def get_additional_tables(cursor):  # Fixed typo in name
     queries = {
         "Suppliers Contact Details": "SELECT supplier_name, contact_name, email, phone FROM suppliers",
         "Products with Supplier and Stock": """
@@ -104,9 +107,10 @@ def get_product_history(cursor, product_id):
 
 
 def place_reorder(cursor, db, product_id, reorder_quantity):
+    # Fixed with COALESCE to handle empty tables seamlessly
     cursor.execute("""
         INSERT INTO reorders (reorder_id, product_id, reorder_quantity, reorder_date, status)
-        SELECT MAX(reorder_id)+1, %s, %s, CURDATE(), 'Ordered'
+        SELECT COALESCE(MAX(reorder_id), 0) + 1, %s, %s, CURDATE(), 'Ordered'
         FROM reorders
     """, (product_id, reorder_quantity))
     db.commit()
