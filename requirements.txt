@@ -1,4 +1,6 @@
 streamlit
+pandas
+plotly
+numpy
 mysql-connector-python
 python-dotenv
-pandas
