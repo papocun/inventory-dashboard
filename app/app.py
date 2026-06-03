@@ -282,8 +282,7 @@ def dark_layout(fig, height=380):
 # SIDEBAR
 # ──────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 📦 Inventory")
-    st.markdown("### Supply Chain Dashboard")
+    st.markdown("## Inventory Dashboard ")
     st.markdown("---")
     option = st.radio(
         "nav",
@@ -291,7 +290,7 @@ with st.sidebar:
         label_visibility="collapsed"
     )
     st.markdown("---")
-    st.caption("MySQL · Streamlit · Plotly")
+    st.caption("Made by Divyanshu :)")
 
 
 # ──────────────────────────────────────────────
